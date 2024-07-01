@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
+    <title>Document</title>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            console.log('http://' + document.domain + ':' + location.port)
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            
+    
+            socket.on('connect', function(){
+                    var connect_string = 'new_connect';
+                    socket.send(connect_string);
+            });
+    
+            socket.on('message', function(msg){
+                    $(".tp span").text(msg.type)
+                    if(msg.type=="admin"){
+                        $('.md').append(`<div class="chat u3"><p>${msg.type}🐞</p><h3>${msg.message}</h3></div>`);
+                    }else if(msg.type=="CERT-IS"){
+                        $('.md').append(`<div class="chat u2"><p>${msg.type}</p><h3>${msg.message}</h3></div>`);
+                    }else{
+                        $('.md').append(`<div class="chat u1"><p>${msg.type}</p><h3>${msg.message}</h3></div>`);
+                    }
+                    console.log('Received Message : '+msg.type);
+            });
+    
+            $('#sendbutton').on('click', function(){
+                    socket.send($('#myMessage').val());
+                    $('#myMessage').val('');
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="chat-area">
+        <!-- header -->
+        <div class="tp">
+            <h2>CERT-IS talk🐞 (user = <span></span>)</h2>
+        </div>
+
+        <!-- chat -->
+        <div class="md">
+            <div class="chat"></div>
+        </div>
+
+
+        <!-- message -->
+        <div class="bt">
+            <input type="text" name="chat" placeholder="메시지 입력" id="myMessage">
+            <button id="sendbutton">전송</button>
+        </div>
+    </div>
+</body>
+</html>

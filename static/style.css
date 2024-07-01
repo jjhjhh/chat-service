@@ -1,0 +1,64 @@
+*{margin:0; padding:0; border-collapse: none;box-sizing: border-box; color:#333;font-weight: lighter;}
+::-webkit-scrollbar {
+    display: none;
+}
+html{scroll-behavior: smooth}
+body{
+    /* background: linear-gradient(to right, #e0eafc, #cfdef3); */
+    background-image:url('/static/nasa-Q1p7bh3SHj8-unsplash.jpg');
+    background-repeat: no-repeat;background-position: center;background-size: cover;height:100vh;
+    position: relative;
+}
+.flex{display: flex; flex-wrap: wrap;}
+.btw{display: flex;justify-content: space-between;}
+.h{height:10vh}
+.hh{height:5vh}
+.b{border:1px solid black}
+a{text-decoration: none;cursor: pointer;}
+ul{list-style: none;}
+.full{width:100%;height:100vh;position: relative;overflow: hidden;}
+
+.box{position: absolute;right:0;width:40%;height:100vh;background:rgba(255,255,255,.5)}
+.log{position: absolute; transform: translate(-50%,-50%);left:50%;top:50%;width:70%}
+.log h2{font-size:7vh;line-height: 10vh;font-weight: bold;}
+.log p{font-size:1em;text-indent: 5px;}
+.log input{width:100%;height:50px;background:white;border:none;margin:5px 0 20px 0;font-size:1.1em;text-indent: 20px;border-radius: 50px;}
+
+.log button{background:#333;color:white;text-indent: 0;width:100%;height:50px;border:none;font-size:1em}
+
+.chat-area{
+    background:rgba(255,255,255,.5);overflow: scroll;width:35%;position: absolute;transform: translate(-50%,-50%);left:50%;top:50%;height:100vh;
+    box-shadow: 0 0 5px 0px rgba(0,0,0,.1);}
+.tp{border-bottom:1px solid #e6e6e6;height:50px;padding:5px;position: fixed;top:0;background:white;width:100%}
+
+.md{
+    display: flex;
+    flex-direction: column;
+    height:100%;
+    overflow: scroll;
+}
+.chat{
+    margin:10px;padding:10px;border-radius: 5px;
+    display: inline-block;
+    min-height:50px;
+}
+.u1{background-color:#FBF6D9;}
+.u2{background-color:#f2f2f2}
+.u3{background-color:#333;}
+.u3 p{color:white}
+.u3 h3{color:white !important}
+.md p{font-size:.8em}
+
+.bt{border-top:1px solid #e6e6e6;height:50px;position: fixed;bottom:0;width:100%}
+.bt form{height:100%}
+.bt input{width:79%;font-size:1.2em;text-indent: 10px;border:none;height:100%}
+.bt button{width:20%;height:100%;background: #333;color:white;border:none}
+
+.post1{position: absolute;transform: translate(-50%,-50%);left:10%;top:40%;background:white;padding:20px;box-shadow: 0 0 5px 0px rgba(0,0,0,.1);}
+
+@media (max-width:850px) {
+    .box{width:100%;}
+    .chat-area{width:100%}
+    .bt input{width:75%;font-size:1.2em;text-indent: 10px;border:none;height:100%}
+    .bt button{width:20%;}
+}

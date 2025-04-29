@@ -1,54 +1,66 @@
-from flask import Flask, render_template, request, redirect, session,url_for
-from flask_socketio import SocketIO, send
+from flask import Flask, render_template, request, redirect, url_for, make_response
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
+from flask_socketio import disconnect
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 socket_io = SocketIO(app)
 
-users = {
-    'admin': 'waesrdftygkjf34m40-5j34fmsk',
-    'CERT-IS': '1004*',
-    'PKNU':'24'
-}
+users = {}
 
-# 로그인
 @app.route("/")
 def website():
     return render_template('index.html') 
 
-@app.route("/login",methods=['GET','POST'])
+@app.route("/login", methods=['POST'])
 def login():
-    print("login endpoint")
-    if request.method=="POST": 
-        id=request.form['id']
-        pw=request.form['pw']
-        
-        if id in users and users[id]==pw:
-            session['id']=id
-            return redirect(url_for('chatting'))
-        else:
-            return render_template('index.html', error='Invalid username or password')
+    id = request.form['id']
+    pw = request.form['pw']
 
-    return render_template('index.html') 
+    if id == "AdminEunha":
+        return render_template('index.html', error='this name is Admin!')
 
+    if id and pw:
+        resp = make_response(redirect(url_for('chatting')))
+        resp.set_cookie('id', id)
+        return resp
+    else:
+        return render_template('index.html', error='Invalid username or password')
 
-# 채팅
 @app.route('/chat')
 def chatting():
-    return render_template('chat.html')
-
-@socket_io.on("message")
-def request_msg(message):
-    print("message : " + message)
-    to_client = dict()
-
-    if message == 'new_connect':
-        to_client['message'] = "안녕"+session['id']+"."
-        to_client['type'] = session['id']
+    username = request.cookies.get('id')
+    if username:
+        return render_template('chat.html', username=username)
     else:
-        to_client['message'] = message
-        to_client['type'] = session['id']
-    send(to_client, broadcast = True)
+        return redirect(url_for('website'))
+
+
+# 연결- 쿠키에서 ID 가져와 저장
+@socket_io.on('connect')
+def handle_connect():
+    id = request.cookies.get('id')
+    if id:
+        users[request.sid] = id
+        print(f"[+] {id} connected")
+
+    else:
+        print("[-] No ID found, disconnecting...")
+        disconnect()
+
+# 메시지 수신
+@socket_io.on('message')
+def handle_message(message):
+    id = users.get(request.sid, 'Unknown')
+    print(f"[{id}] message: {message}")
+
+    if "script" in message:
+        return False
+
+    to_client = {
+        'message': message,
+    }
+    send(to_client, broadcast=True)
 
 
 if __name__ == "__main__":

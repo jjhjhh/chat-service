@@ -6,28 +6,39 @@
     <link rel="stylesheet" href="/static/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
     <title>Document</title>
 
     <script type="text/javascript">
         $(document).ready(function(){
+            user="{{ username }}"
+            $(".tp span").text(user); //username
+
             console.log('http://' + document.domain + ':' + location.port)
             var socket = io.connect('http://' + document.domain + ':' + location.port);
             
     
             socket.on('connect', function(){
-                    var connect_string = 'new_connect';
+                    var connect_string = user+" hello !";
                     socket.send(connect_string);
             });
     
             socket.on('message', function(msg){
-                    $(".tp span").text(msg.type)
-                    if(msg.type=="admin"){
-                        $('.md').append(`<div class="chat u3"><p>${msg.type}🐞</p><h3>${msg.message}</h3></div>`);
-                    }else if(msg.type=="CERT-IS"){
-                        $('.md').append(`<div class="chat u2"><p>${msg.type}</p><h3>${msg.message}</h3></div>`);
+                    
+                    
+
+                    if(user=="AdminEunha"){
+                        $('.chat-area').append(`<div class="chat a"><p>admin</p><h3>${msg.message}</h3></div>`);
                     }else{
-                        $('.md').append(`<div class="chat u1"><p>${msg.type}</p><h3>${msg.message}</h3></div>`);
+                        $('.chat-area').append(`<div class="chat"><p>${user}</p><h3>${msg.message}</h3></div>`);
                     }
+                    
+
+                    const chatArea = document.querySelector('.chat-area');
+                    chatArea.scrollTop = chatArea.scrollHeight;
+
                     console.log('Received Message : '+msg.type);
             });
     
@@ -38,24 +49,22 @@
         });
     </script>
 </head>
+<style>
+    body{background:#2413AB}
+    h2 span{color:#B1F8D6}
+</style>
 <body>
+    <div class="tp">
+        <h2>CERT-IS CHAT : user = <span></span></h2>
+    </div>
     <div class="chat-area">
-        <!-- header -->
-        <div class="tp">
-            <h2>CERT-IS talk🐞 (user = <span></span>)</h2>
-        </div>
-
         <!-- chat -->
-        <div class="md">
-            <div class="chat"></div>
-        </div>
+        <!-- <div style="height:15vh"></div> -->
+    </div>
 
-
-        <!-- message -->
-        <div class="bt">
-            <input type="text" name="chat" placeholder="메시지 입력" id="myMessage">
-            <button id="sendbutton">전송</button>
-        </div>
+    <div class="bt line">
+        <input type="text" name="chat" placeholder="메시지 입력" id="myMessage">
+        <button id="sendbutton">Submit</button>
     </div>
 </body>
 </html>
